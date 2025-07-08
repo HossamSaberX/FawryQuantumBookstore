@@ -94,7 +94,7 @@ public class Bookstore
             ShippingService.Send(paperBook, quantity, address);
             return paperBook.Price * quantity;
         }
-        
+
         if (book is EBook ebook)
         {
             MailService.Send(ebook, email);
@@ -104,10 +104,49 @@ public class Bookstore
     }
 }
 
+public class Tests
+{
+    public static void Run()
+    {
+        var bookstore = new Bookstore();
+        bookstore.AddBook(new PaperBook("123", "A Game of Thrones", 1995, 25, 10));
+        bookstore.AddBook(new PaperBook("456", "Head First C#", 2010, 35.5, 5));
+        bookstore.AddBook(new EBook("789", "Grokking Algorithms", 2016, 29.99, "PDF"));
+        bookstore.AddBook(new EBook("101", "A Song of Ice and Fire", 2011, 49.99, "EPUB"));
+        bookstore.AddBook(new ShowcaseBook("202", "Showcase Book", 1700));
+
+        Console.WriteLine("\nBuying books...");
+        try
+        {
+            double paid = bookstore.BuyBook("123", 2, "hossam.sabeer55@gmail.com", "6th of October");
+            Console.WriteLine($"Paid: {paid:C}");
+
+            paid = bookstore.BuyBook("789", 1, "hossam.sabeer55@gmail.com", "6th of October");
+            Console.WriteLine($"Paid: {paid:C}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.Message}");
+        }
+
+        Console.WriteLine("\nTrying to buy a showcase book...");
+        try
+        {
+            bookstore.BuyBook("202", 1, "hossam.sabeer55@gmail.com", "6th of October");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error: {e.Message}");
+        }
+
+        Console.WriteLine("\nRemoving outdated books (older than 50 years)...");
+        bookstore.RemoveOutdatedBooks(50);
+    }
+}
 public class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Hello world!");
+        Tests.Run();
     }
 }
