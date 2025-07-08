@@ -76,10 +76,12 @@ public class Bookstore
         return _books.FirstOrDefault(b => b.ISBN == isbn);
     }
 
-    public void RemoveOutdatedBooks(int years)
+    public List<Book> RemoveOutdatedBooks(int years)
     {
         int currentYear = DateTime.Now.Year;
+        var outdatedBooks = _books.Where(b => currentYear - b.Year > years).ToList();
         _books.RemoveAll(b => currentYear - b.Year > years);
+        return outdatedBooks;
     }
 
     public double BuyBook(string isbn, int quantity, string email, string address)
@@ -140,7 +142,16 @@ public class Tests
         }
 
         Console.WriteLine("\nRemoving outdated books (older than 50 years)...");
-        bookstore.RemoveOutdatedBooks(50);
+        var removedBooks = bookstore.RemoveOutdatedBooks(50);
+        if (removedBooks.Count > 0)
+        {
+            Console.WriteLine($"Removed {removedBooks.Count} outdated book(s):");
+            foreach (var book in removedBooks)
+            {
+                Console.WriteLine($"- {book.Title} (ISBN: {book.ISBN}, Year: {book.Year})");
+            }
+        }
+        else Console.WriteLine("No outdated books to remove.");
     }
 }
 public class Program
