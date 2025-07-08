@@ -31,16 +31,48 @@ The program executes a test suite that performs several actions: buying books, h
 
 The first part of the output shows the successful purchase of a PaperBook and an EBook, including the corresponding shipping/mailing actions and the total price paid.
 
+```csharp
+double paid = bookstore.BuyBook("123", 2, "hossam.sabeer55@gmail.com", "6th of October");
+Console.WriteLine($"Paid: {paid:C}");
+
+paid = bookstore.BuyBook("789", 1, "hossam.sabeer55@gmail.com", "6th of October");
+Console.WriteLine($"Paid: {paid:C}");
+```
+
 ![Successful Book Purchases](screenshots/sucessful.png)
 
 ### 2. Handling Unsupported Book Types
 
 Next, the test attempts to buy a ShowcaseBook, which is not for sale. The program correctly throws and catches an exception, displaying an error message.
 
+```csharp
+try
+{
+    bookstore.BuyBook("202", 1, "hossam.sabeer55@gmail.com", "6th of October");
+}
+catch (Exception e)
+{
+    Console.WriteLine($"Error: {e.Message}");
+}
+```
+
 ![Unsupported Book Purchase Attempt](screenshots/unsupported.png)
 
 ### 3. Removing Outdated Books
 
 Finally, the program identifies and removes books older than 50 years from the bookstore's inventory and lists the titles that were removed.
+
+```csharp
+var removedBooks = bookstore.RemoveOutdatedBooks(50);
+if (removedBooks.Count > 0)
+{
+    Console.WriteLine($"Removed {removedBooks.Count} outdated book(s):");
+    foreach (var book in removedBooks)
+    {
+        Console.WriteLine($"- {book.Title} (ISBN: {book.ISBN}, Year: {book.Year})");
+    }
+}
+else Console.WriteLine("No outdated books to remove.");
+```
 
 ![Removing Outdated Books](screenshots/outdated.png)
